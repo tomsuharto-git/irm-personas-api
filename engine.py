@@ -86,7 +86,9 @@ class FocusGroupEngine:
     """
 
     def __init__(self, api_key: str = None):
-        self.client = Anthropic(api_key=api_key or os.environ.get("ANTHROPIC_API_KEY"))
+        # Strip API key to remove any trailing newlines (common issue with env vars)
+        key = api_key or os.environ.get("ANTHROPIC_API_KEY", "")
+        self.client = Anthropic(api_key=key.strip() if key else None)
         self.personas: List[Persona] = []
         self.audience_id: str = None
         self.category: str = None
