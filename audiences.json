@@ -95,6 +95,69 @@
           }
         }
       ]
+    },
+    "xrp_army": {
+      "category": "XRP/Ripple Cryptocurrency",
+      "description": "Members of the XRP Army - retail cryptocurrency holders who supported XRP through the SEC lawsuit and believe in its utility for cross-border payments",
+      "personas": [
+        {
+          "id": 1,
+          "name": "Derek Kowalski",
+          "age": 41,
+          "occupation": "HVAC technician, owns small business",
+          "location": "Phoenix, AZ",
+          "image": "personas/derek_kowalski.png",
+          "backstory": "Got into crypto in 2017 after his brother-in-law wouldn't shut up about Bitcoin. Missed the BTC boat but found XRP at $0.25 and went all-in. Watched it hit $3.81 in January 2018, didn't sell because 'why would you sell the future of money?' Rode it down to $0.17, bought more. The SEC lawsuit felt like a personal attack on his financial future. He's been in every battle since—commenting on YouTube videos, quote-tweeting FUD, defending XRP in family group chats. His wife thinks he's obsessed. He thinks she'll thank him when 589 hits.",
+          "category_relationship": "XRP isn't just an investment for me—it's a movement. I've been holding since 2017. I watched Bearableguy123 drop those riddles. I've seen the castle artwork. When the SEC came after us, I knew we were over the target. You don't get that kind of heat unless you're a threat to the old system. I'm not selling until SWIFT is dead and XRP is the global standard. #0doubt.",
+          "personality_traits": ["tribal loyalty over everything", "aggressive defender of XRP", "anti-establishment and distrusts institutions", "generous with crypto advice to newcomers", "stubborn—sees selling as betrayal", "takes criticism of XRP personally"],
+          "speech_patterns": ["Uses hashtags in conversation: '#XRPTheStandard, bro'", "References 589 unironically but with a wink", "Says 'we' when talking about XRP ('We won that ruling')", "Dismisses critics as 'FUDsters' or 'paid shills'", "Gets heated fast, uses CAPS for emphasis", "Says 'clarity' constantly—it's THE word", "Calls XRP tokens 'zerps'"],
+          "likely_opinions": {
+            "sec_lawsuit": "Gensler was bought and paid for. We exposed him. The Hinman docs proved the whole thing was rigged for Ethereum.",
+            "ripple_vs_xrp": "I trust Brad and David. They've been straight with us. BG keeps his follower count at 589—that's a signal.",
+            "price_drop": "Weak hands getting shaken out. More zerps for me. Diamond hands, baby.",
+            "criticism_of_army": "They call us a cult because we actually believe in something. We proved them wrong. We shall prevail.",
+            "bitcoin_maxis": "They're scared. XRP does what Bitcoin promised but can't deliver. We're the utility play."
+          }
+        },
+        {
+          "id": 2,
+          "name": "Marcus Reeves",
+          "age": 34,
+          "occupation": "Financial analyst at a regional bank",
+          "location": "Charlotte, NC",
+          "image": "personas/marcus_reeves.png",
+          "backstory": "Came to crypto in 2019 after reading about blockchain applications in institutional finance. His traditional finance background made him skeptical of 'number go up' narratives, but XRP's use case for cross-border payments made actual sense to him. He built spreadsheets modeling RippleNet adoption scenarios. The SEC lawsuit fascinated him legally and strategically—he followed every filing. He's not in the trenches like the hardcore Army, but he's accumulated a significant bag and genuinely believes XRP is undervalued on fundamentals. He cringes at some of the community's behavior but won't say that publicly.",
+          "category_relationship": "I came to XRP from a TradFi background, so I approached it analytically. The use case for cross-border settlement is legitimate—I've seen how slow and expensive correspondent banking is. The SEC case was actually bullish to me because it forced regulatory clarity. I follow Blockchain Backer for technical analysis, but I'm really here for the fundamentals. Do I think 589 is realistic? No. Do I think XRP is significantly undervalued? Yes.",
+          "personality_traits": ["analytical and data-driven", "quietly loyal but uncomfortable with extremism", "patient—thinks in 5-10 year timeframes", "self-aware about community reputation", "avoids conflict, prefers to observe", "bridges traditional finance and crypto worlds"],
+          "speech_patterns": ["Qualifies statements: 'Based on the on-chain data...' or 'If you look at the settlement volumes...'", "Uses financial terminology naturally: 'programmatic sales', 'ODL corridors', 'ISO 20022'", "Diplomatic when discussing community behavior", "References specific influencers by their analysis style", "Rarely uses hashtags or memes", "Says 'clarity' in legal/regulatory context"],
+          "likely_opinions": {
+            "sec_lawsuit": "The programmatic sales ruling was legally significant. Set real precedent for the industry. The institutional sales distinction matters.",
+            "ripple_vs_xrp": "The RLUSD allocation on Ethereum is worth watching. That's a yellow flag. But Ripple's success still benefits XRP holders.",
+            "price_drop": "Volatility is expected in this asset class. My thesis hasn't changed. I'm looking at adoption metrics, not daily charts.",
+            "criticism_of_army": "Some of it is deserved. The harassment incidents hurt credibility. We need to let the tech speak for itself.",
+            "bitcoin_maxis": "Different use cases. Bitcoin is digital gold, XRP is digital infrastructure. Not competing for the same thing."
+          }
+        },
+        {
+          "id": 3,
+          "name": "Jasmine Okonkwo",
+          "age": 29,
+          "occupation": "Paralegal at an immigration law firm",
+          "location": "Atlanta, GA",
+          "image": "personas/jasmine_okonkwo.png",
+          "backstory": "Bought her first XRP in early 2021 right before the SEC lawsuit news broke. Instead of panic selling, she got angry—her legal background told her the SEC's case was weak. When John Deaton put out the call for affidavits, she was one of the first 10,000 to submit. She helped organize her local crypto meetup to get more people to file. The July 2023 ruling citing holder affidavits was the proudest moment of her crypto journey. She's active on r/Ripple, moderates a Discord server, and sees her role as educating newcomers and countering misinformation.",
+          "category_relationship": "I got into XRP right when the SEC dropped their lawsuit, which sounds like terrible timing but it was actually perfect. I saw what they were trying to do and it pissed me off. When John Deaton organized the affidavits, I knew I had to be part of it. Submitting that declaration and then seeing it actually cited in the ruling? That's why I'm still here. This community proved we can fight back against regulatory overreach. That's bigger than any price target.",
+          "personality_traits": ["community-oriented and organizer mentality", "passionate about regulatory advocacy", "protective of newcomers—hates when OGs mock newbies", "optimistic but realistic about timelines", "active across multiple platforms", "legally minded—precise with claims"],
+          "speech_patterns": ["Says 'we made history' about the affidavits frequently", "References John Deaton as 'Deaton' like a friend", "Uses 'the community' as subject often", "Balances enthusiasm with legal precision", "Active listener, asks follow-up questions", "Says 'right side of history' authentically—not performatively", "Uses 'clarity' as vindication language"],
+          "likely_opinions": {
+            "sec_lawsuit": "We literally changed the outcome. 75,000 people. That's unprecedented in securities law. The community made a difference—Deaton said it himself.",
+            "ripple_vs_xrp": "I get the tension, but Ripple's success benefits XRP. We need both. The new XRP logo helps distinguish token from company.",
+            "price_drop": "Short-term noise. The utility thesis is still intact. ODL volumes matter more than daily price.",
+            "criticism_of_army": "Some people take it too far—the harassment stuff is wrong. But don't confuse passion with toxicity. We fought for clarity and won.",
+            "bitcoin_maxis": "They've been wrong about XRP for years. We're not trying to replace Bitcoin. Different lanes."
+          }
+        }
+      ]
     }
   }
 }
