@@ -1,8 +1,63 @@
 # Focus Group Chat API
 
-A synthetic focus group system powered by IRM (Impersonas Research Model). Generate rich personas from recruitment specs and chat with them via a stateless API.
+Stateless API for synthetic focus group conversations with AI-powered personas.
 
-## Overview
+**Production URL:** https://focusgroup-plum.vercel.app
+**GitHub:** https://github.com/tomsuharto-git/irm-personas-api
+
+---
+
+## Quick Start
+
+```bash
+# List audiences
+curl https://focusgroup-plum.vercel.app/audiences
+
+# Get persona details
+curl https://focusgroup-plum.vercel.app/audiences/xrp_army
+
+# Ask the group
+curl -X POST 'https://focusgroup-plum.vercel.app/audiences/xrp_army/ask' \
+  -H 'Content-Type: application/json' \
+  -d '{"question": "How did you first discover XRP?"}'
+```
+
+---
+
+## Documentation
+
+| Guide | Description |
+|-------|-------------|
+| **[Implementation Guide](docs/IMPLEMENTATION-GUIDE.md)** | Full technical documentation, architecture, engine details |
+| **[Adding New Audiences](docs/ADDING-NEW-AUDIENCE.md)** | Step-by-step guide for creating personas |
+
+---
+
+## Current Audiences
+
+| ID | Category | Personas |
+|----|----------|----------|
+| `xrp_army` | XRP/Ripple Community | Derek (41), Marcus (34), Jasmine (29) |
+| `premium_chocolate` | Premium Chocolate Consumers | 6 personas |
+
+### XRP Army Personas
+
+| Name | Age | Role | Key Traits |
+|------|-----|------|------------|
+| Derek Kowalski | 41 | HVAC business owner, Phoenix | OG since 2017, tribal, uses #XRPTheStandard |
+| Marcus Reeves | 34 | Financial analyst, Charlotte | Analytical, traditional finance background |
+| Jasmine Okonkwo | 29 | Paralegal, Atlanta | Legal-minded, community organizer |
+
+**Persona Images:**
+```
+https://raw.githubusercontent.com/tomsuharto-git/irm-personas-api/main/personas/derek_kowalski.png
+https://raw.githubusercontent.com/tomsuharto-git/irm-personas-api/main/personas/marcus_reeves.png
+https://raw.githubusercontent.com/tomsuharto-git/irm-personas-api/main/personas/jasmine_okonkwo.png
+```
+
+---
+
+## How It Works
 
 ```
 ┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
@@ -13,151 +68,72 @@ A synthetic focus group system powered by IRM (Impersonas Research Model). Gener
         │  Stores conversation
         │  history locally
         ▼
-   [localStorage]
+   [State/localStorage]
 ```
 
 **Key Features:**
-- **Stateless API** - Frontend manages conversation history (perfect for serverless)
-- **Rich personas** with narrative anchors (not just demographics)
+- **Stateless API** - Frontend manages conversation history
+- **Rich personas** with backstory, personality, speech patterns
 - **AI-driven turn-taking** - 2-4 personas respond naturally per question
-- **Persona memory** - Prevents contradictions via history replay
+- **Persona memory** - History replay prevents contradictions
 - **1:1 mode** - Ask specific personas directly
-- **Anti-generic safeguards** - Blocks survey-speak
 
 ---
 
-## Quick Start
-
-### 1. Install Dependencies
-
-```bash
-cd focus_group
-pip install -r requirements.txt
-```
-
-### 2. Set API Key
-
-```bash
-export ANTHROPIC_API_KEY="your-key-here"
-```
-
-### 3. Run Locally
-
-```bash
-uvicorn api:app --reload
-```
-
-API available at `http://localhost:8000`
-
-### 4. Test with curl
-
-```bash
-# List audiences
-curl http://localhost:8000/audiences
-
-# Get audience details
-curl http://localhost:8000/audiences/premium_chocolate
-
-# Ask a question (first message - no history)
-curl -X POST http://localhost:8000/audiences/premium_chocolate/ask \
-  -H "Content-Type: application/json" \
-  -d '{"question": "What comes to mind when you think of premium chocolate?"}'
-
-# Ask follow-up (include history from previous response)
-curl -X POST http://localhost:8000/audiences/premium_chocolate/ask \
-  -H "Content-Type: application/json" \
-  -d '{
-    "question": "How does that compare to grocery store chocolate?",
-    "history": [
-      {"role": "moderator", "text": "What comes to mind when you think of premium chocolate?"},
-      {"role": "persona", "persona_id": 4, "persona_name": "Priya Sharma", "text": "My first thought is always the cacao percentage..."}
-    ]
-  }'
-```
-
----
-
-## API Reference
-
-### Endpoints
+## API Endpoints
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
 | `GET` | `/` | Health check |
-| `GET` | `/audiences` | List all available audiences |
-| `GET` | `/audiences/{id}` | Get audience details + personas |
-| `POST` | `/audiences/{id}/ask` | Ask the group (AI selects responders) |
+| `GET` | `/audiences` | List all audiences |
+| `GET` | `/audiences/{id}` | Get audience + personas |
+| `POST` | `/audiences/{id}/ask` | Ask group (AI picks responders) |
 | `POST` | `/audiences/{id}/ask/{persona_id}` | Ask specific persona (1:1) |
 
 ### Request/Response Format
 
 **Ask Group:**
-```javascript
-// Request
-POST /audiences/premium_chocolate/ask
+```json
+// POST /audiences/xrp_army/ask
 {
-  "question": "What makes chocolate feel premium to you?",
-  "history": [...]  // Previous messages (optional for first question)
+  "question": "What do you think about the SEC lawsuit outcome?",
+  "history": []
 }
 
-// Response
+// Response:
 {
   "responses": [
-    {
-      "persona_id": 2,
-      "persona_name": "Jennifer Martinez",
-      "text": "It's that moment when you break off a piece..."
-    },
-    {
-      "persona_id": 6,
-      "persona_name": "Aisha Williams",
-      "text": "For me it's about the story behind it..."
-    }
+    {"persona_id": 1, "persona_name": "Derek Kowalski", "text": "..."},
+    {"persona_id": 3, "persona_name": "Jasmine Okonkwo", "text": "..."}
   ],
   "history": [
-    // Full conversation including new messages
-    {"role": "moderator", "text": "What makes chocolate feel premium to you?"},
-    {"role": "persona", "persona_id": 2, "persona_name": "Jennifer Martinez", "text": "..."},
-    {"role": "persona", "persona_id": 6, "persona_name": "Aisha Williams", "text": "..."}
+    {"role": "moderator", "text": "What do you think..."},
+    {"role": "persona", "persona_id": 1, "persona_name": "Derek Kowalski", "text": "..."},
+    {"role": "persona", "persona_id": 3, "persona_name": "Jasmine Okonkwo", "text": "..."}
   ]
 }
 ```
 
-**Ask Specific Persona (1:1):**
-```javascript
-// Request
-POST /audiences/premium_chocolate/ask/1
+**Ask Specific Persona:**
+```json
+// POST /audiences/xrp_army/ask/1
 {
-  "question": "Marcus, tell me more about your girlfriend's influence",
-  "history": [...]
+  "question": "Tell me more about your brother-in-law",
+  "history": [/* previous messages */]
 }
 
-// Response
+// Response:
 {
-  "response": {
-    "persona_id": 1,
-    "persona_name": "Marcus Chen",
-    "text": "Oh man, so she's like... she's one of those people who actually reads ingredients..."
-  },
-  "history": [...]  // Updated with new exchange
+  "response": {"persona_id": 1, "persona_name": "Derek Kowalski", "text": "..."},
+  "history": [/* updated */]
 }
 ```
 
 ---
 
-## Frontend Integration
-
-### React Example
+## TypeScript Types
 
 ```typescript
-// types.ts
-interface Message {
-  role: 'moderator' | 'persona';
-  text: string;
-  persona_id?: number;
-  persona_name?: string;
-}
-
 interface Persona {
   id: number;
   name: string;
@@ -166,327 +142,105 @@ interface Persona {
   location: string;
   backstory: string;
   personality_traits: string[];
+  image?: string;
 }
 
-// useFocusGroup.ts
-const API_URL = 'https://your-api.vercel.app';
-
-export function useFocusGroup(audienceId: string) {
-  const [history, setHistory] = useState<Message[]>([]);
-  const [personas, setPersonas] = useState<Persona[]>([]);
-  const [loading, setLoading] = useState(false);
-
-  // Load audience on mount
-  useEffect(() => {
-    fetch(`${API_URL}/audiences/${audienceId}`)
-      .then(r => r.json())
-      .then(data => setPersonas(data.personas));
-  }, [audienceId]);
-
-  // Ask the group
-  const askGroup = async (question: string) => {
-    setLoading(true);
-    const res = await fetch(`${API_URL}/audiences/${audienceId}/ask`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ question, history })
-    });
-    const data = await res.json();
-    setHistory(data.history);  // Store updated history
-    setLoading(false);
-    return data.responses;
-  };
-
-  // Ask specific persona
-  const askPersona = async (personaId: number, question: string) => {
-    setLoading(true);
-    const res = await fetch(`${API_URL}/audiences/${audienceId}/ask/${personaId}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ question, history })
-    });
-    const data = await res.json();
-    setHistory(data.history);
-    setLoading(false);
-    return data.response;
-  };
-
-  // Reset conversation
-  const reset = () => setHistory([]);
-
-  return { personas, history, loading, askGroup, askPersona, reset };
+interface Message {
+  role: "moderator" | "persona";
+  text: string;
+  persona_id?: number;
+  persona_name?: string;
 }
 
-// FocusGroupChat.tsx
-function FocusGroupChat() {
-  const { personas, history, loading, askGroup, askPersona } = useFocusGroup('premium_chocolate');
-  const [input, setInput] = useState('');
+interface AskRequest {
+  question: string;
+  history?: Message[];
+}
 
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-    if (!input.trim()) return;
-
-    await askGroup(input);
-    setInput('');
-  };
-
-  return (
-    <div className="focus-group">
-      {/* Persona sidebar */}
-      <aside>
-        {personas.map(p => (
-          <div key={p.id} className="persona-card">
-            <strong>{p.name}</strong>, {p.age}
-            <p>{p.occupation}</p>
-            <button onClick={() => askPersona(p.id, input)}>
-              Ask directly
-            </button>
-          </div>
-        ))}
-      </aside>
-
-      {/* Chat area */}
-      <main>
-        {history.map((msg, i) => (
-          <div key={i} className={`message ${msg.role}`}>
-            <strong>
-              {msg.role === 'moderator' ? 'You' : msg.persona_name}:
-            </strong>
-            <p>{msg.text}</p>
-          </div>
-        ))}
-
-        {loading && <div className="loading">Thinking...</div>}
-
-        <form onSubmit={handleSubmit}>
-          <input
-            value={input}
-            onChange={e => setInput(e.target.value)}
-            placeholder="Ask the group..."
-            disabled={loading}
-          />
-          <button type="submit" disabled={loading}>Send</button>
-        </form>
-      </main>
-    </div>
-  );
+interface AskResponse {
+  responses: Array<{
+    persona_id: number;
+    persona_name: string;
+    text: string;
+  }>;
+  history: Message[];
 }
 ```
 
 ---
 
-## Deploy to Vercel
-
-### 1. Project Structure
-
-```
-focus_group/
-├── api.py              # FastAPI app (entry point)
-├── engine.py           # Core chat engine
-├── audiences.json      # Persona configurations
-├── requirements.txt    # Dependencies
-├── vercel.json         # Vercel config
-└── README.md
-```
-
-### 2. Deploy
+## Local Development
 
 ```bash
 cd focus_group
+pip install -r requirements.txt
+export ANTHROPIC_API_KEY="your-key"
 
-# Add API key as secret (one time)
-vercel secrets add anthropic-api-key "sk-ant-..."
-
-# Deploy
-vercel --prod
-```
-
-### 3. Environment Variables
-
-In Vercel Dashboard → Settings → Environment Variables:
-- `ANTHROPIC_API_KEY`: Your Anthropic API key
-
----
-
-## Personas
-
-### Structure
-
-Each persona has **narrative anchors** that enforce consistent, authentic responses:
-
-```json
-{
-  "id": 1,
-  "name": "Marcus Chen",
-  "age": 28,
-  "occupation": "Software engineer at a fintech startup",
-  "location": "Austin, TX",
-
-  "backstory": "Moved from Seattle 2 years ago. Works long hours but values work-life balance...",
-
-  "category_relationship": "Chocolate is an impulse buy at checkout. My girlfriend introduced me to nicer brands.",
-
-  "personality_traits": ["analytical", "skeptical of marketing", "direct communicator"],
-
-  "speech_patterns": ["Uses tech metaphors", "Tends to qualify statements", "Self-deprecating humor"],
-
-  "likely_opinions": {
-    "premium_chocolate": "Sees value but questions if he can taste the difference"
-  }
-}
-```
-
-### Why Rich Personas Work
-
-| Approach | Result |
-|----------|--------|
-| Demographics only | LLM predicts "mode" → everyone sounds the same |
-| Rich narrative anchors | Each persona has unique perspective → real variance |
-
-### Adding New Audiences
-
-Edit `audiences.json` or ask Claude to generate personas from your recruitment spec:
-
-```
-"I need a focus group for [category]. Recruit:
-- 2 heavy users (weekly purchase)
-- 2 light users (monthly)
-- 2 non-users who are aware
-Mix of ages 25-55, income $50K+, urban/suburban"
+# Test with Python
+python3 -c "
+from engine import FocusGroupEngine
+engine = FocusGroupEngine()
+result = engine.ask_stateless(
+    question='How did you first discover XRP?',
+    audience_id='xrp_army',
+    config_path='audiences.json'
+)
+for r in result['responses']:
+    print(f\"{r['persona_name']}: {r['text']}\n\")
+"
 ```
 
 ---
 
-## How It Works
+## Deploy
 
-### 1. Stateless Flow
-
-```
-Frontend                    API                         Claude
-   │                         │                            │
-   │─── POST /ask ──────────▶│                            │
-   │    {question, history}  │                            │
-   │                         │── rebuild state ──────────▶│
-   │                         │   from history             │
-   │                         │                            │
-   │                         │── select responders ──────▶│
-   │                         │   (2-4 personas)           │
-   │                         │                            │
-   │                         │── generate responses ─────▶│
-   │                         │   (per persona)            │
-   │                         │                            │
-   │◀── {responses, history}─│                            │
-   │                         │                            │
-   │  Store history locally  │                            │
-   ▼                         ▼                            ▼
+```bash
+git add -A
+git commit -m "Your changes"
+git push tomsuharto-git main
+vercel --prod --yes
 ```
 
-### 2. Persona Consistency
+---
 
-Even though the API is stateless, personas stay consistent because:
+## File Structure
 
-1. **Full history replay** - Each request rebuilds what each persona has said
-2. **Anti-contradiction prompt** - System prompt includes persona's previous statements
-3. **Speech pattern enforcement** - Each persona has defined verbal fingerprints
-
-### 3. Response Selection
-
-AI determines who would naturally respond based on:
-- Question topic vs persona expertise/interest
-- Who hasn't spoken recently
-- Natural group dynamics (some people talk more)
-- Previous statements that relate to this question
+```
+focus_group/
+├── api/
+│   └── index.py           # Vercel serverless handler
+├── docs/
+│   ├── IMPLEMENTATION-GUIDE.md
+│   └── ADDING-NEW-AUDIENCE.md
+├── personas/              # Generated persona images
+│   ├── derek_kowalski.png
+│   ├── marcus_reeves.png
+│   └── jasmine_okonkwo.png
+├── audiences.json         # Audience + persona definitions
+├── engine.py              # Core FocusGroupEngine class
+├── requirements.txt       # Python dependencies
+└── vercel.json            # Vercel config
+```
 
 ---
 
-## Configuration
+## Tech Stack
 
-### Models & Parameters
-
-| Setting | Value | Purpose |
-|---------|-------|---------|
-| Response model | `claude-sonnet-4-20250514` | Quality + speed balance |
-| Response temperature | 0.9 | High personality variance |
-| Selector temperature | 0.7 | Balanced turn-taking |
-| Max response tokens | 300 | Natural response length |
-
-### Customization
-
-Edit `engine.py` to change:
-- Model selection
-- Temperature settings
-- Response length limits
-- Prompt templates
-
----
-
-## Files
-
-| File | Description |
-|------|-------------|
-| `api.py` | Stateless FastAPI endpoints (~150 lines) |
-| `engine.py` | Core chat engine with persona management (~420 lines) |
-| `audiences.json` | Persona configurations |
-| `requirements.txt` | Python dependencies |
-| `vercel.json` | Vercel deployment config |
-
----
-
-## Example Audience: Premium Chocolate
-
-6 personas with distinct voices:
-
-| Persona | Profile | Voice |
-|---------|---------|-------|
-| **Marcus Chen** | 28, software engineer, Austin | Tech metaphors, skeptical, girlfriend-influenced |
-| **Jennifer Martinez** | 42, teacher, Columbus | Sensory descriptions, evening ritual, nurturing |
-| **David Thompson** | 58, retired, Scottsdale | Brief, pragmatic, references late wife |
-| **Priya Sharma** | 35, consultant, Chicago | Data-driven, health-conscious, self-aware |
-| **Bobby DiNardo** | 47, contractor, Providence | Family-focused, Italian traditions, direct |
-| **Aisha Williams** | 31, nonprofit, Atlanta | Story-driven, social media savvy, ethical |
-
----
-
-## Limitations
-
-- **Response time**: 3-8 seconds per question (Claude API latency × responders)
-- **History size**: Very long conversations may hit token limits (~50+ exchanges)
-- **Cold starts**: First request after inactivity may be slower on Vercel
+- **Runtime:** Vercel Serverless (Python 3.12)
+- **AI:** Anthropic Claude API
+- **Persona Images:** GPT-Image-1.5
 
 ---
 
 ## Troubleshooting
 
-**"Audience not found"**
-- Check `audiences.json` has your audience ID
-- Audience IDs are case-sensitive
-
-**Personas sound similar**
-- Ensure personas have distinct `backstory` and `category_relationship`
-- Check `personality_traits` and `speech_patterns` are different
-
-**API timeout**
-- Vercel functions have 10s default timeout
-- Upgrade to Pro for longer timeouts, or reduce responder count
+| Issue | Solution |
+|-------|----------|
+| `FUNCTION_INVOCATION_FAILED` | Check Vercel logs: `vercel logs focusgroup-plum.vercel.app` |
+| API key error | Re-add without newlines: `vercel env add ANTHROPIC_API_KEY production <<< "$(echo -n "$ANTHROPIC_API_KEY")"` |
+| Personas sound similar | Review `speech_patterns` and `personality_traits` in audiences.json |
+| Slow responses | Claude API takes 5-15s for multi-persona responses |
 
 ---
-
-## Documentation
-
-Detailed guides in the `docs/` folder:
-
-| Document | Description |
-|----------|-------------|
-| [ARCHITECTURE.md](docs/ARCHITECTURE.md) | System architecture, data flow, component details |
-| [API.md](docs/API.md) | Complete API reference with examples |
-| [PERSONAS.md](docs/PERSONAS.md) | How to create rich, distinct personas |
-| [DEPLOYMENT.md](docs/DEPLOYMENT.md) | Deploy to Vercel step-by-step |
-| [FRONTEND.md](docs/FRONTEND.md) | React hooks, TypeScript types, UI patterns |
-
----
-
-## Support
 
 Built on IRM (Impersonas Research Model) methodology.
-
-For new audience generation or issues, work with Claude Code.
